@@ -3,7 +3,6 @@ using namespace std;
 
 class Table{
 	
-	private:
 	int r,c;
 	int ** table;
 	
@@ -23,26 +22,8 @@ class Table{
 	void set_r(int R){r = R;}
 	void set_c(int C){c = C;}
 	
-	friend ostream& operator << (ostream &out, Table &t){
-		for(int i = 0; i < t.get_r(); i++){
-			for(int j = 0; j < t.get_c(); j++){
-				out << t[i][j] << " "; 
-			}
-			out << endl;
-		}
-		return out;
-	}
-	
-	friend istream& operator >> (istream &in, Table &t){
-		int val;
-		for(int i = 0; i < t.get_r(); i++){
-			for(int j = 0; j < t.get_c(); j++){
-				in >> val;
-				t[i][j] = val;
-			}
-		}
-		return in;
-	}
+	friend ostream& operator << (ostream &out, Table &t);
+	friend istream& operator >> (istream &in, Table &t);
 	
 	int* operator[](int index){
 		if(index < 0 || index >= r){
@@ -51,7 +32,29 @@ class Table{
 		}
 		return table[index];
 	}
+	
 };
+
+ostream& operator << (ostream &out, Table &t){
+	for(int i = 0; i < t.r; i++){
+		for(int j = 0; j < t.c; j++){
+			out << t.table[i][j] << " "; 
+		}
+		out << endl;
+	}
+	return out;
+}
+	
+istream& operator >> (istream &in, Table &t){
+	int val;
+	for(int i = 0; i < t.r; i++){
+		for(int j = 0; j < t.c; j++){
+			in >> val;
+			t.table[i][j] = val;
+		}
+	}
+	return in;
+}
 
 int main(){
 	Table t(4, 5), t1(4, 5);

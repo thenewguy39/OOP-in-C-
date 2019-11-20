@@ -1,87 +1,111 @@
 #include<iostream>
+#include<math.h>
+#include<string.h>
 using namespace std;
 
 class Complex{
-	float real;
-	float imag;
+        float real;
+        float imag;
 
-	public:
-	Complex(): real(0), imag(0) {}
-	Complex(float r, float i): real(r),imag(i) {}
-	
-	friend ostream& operator << (ostream &out, Complex c);
-	
+        public:
+        Complex(): real(0),imag(0) {}
+        Complex(float r, float i): real(r),imag(i) {}
+
+        bool operator >= (Complex &c){
+        if(real*real + imag*imag >= c.real*c.real + c.imag*c.imag){
+            return true;
+        }
+        return false;
+        }
+
+        friend ostream& operator << (ostream &out, Complex &c);
+
 };
 
-ostream& operator << (ostream &out, Complex c){
+ostream& operator << (ostream &out, Complex &c){
     out << c.real << " + i" << c.imag;
     return out;
 }
 
-template <typename T>
 class Stack{
     int top;
     int size;
-    T *arr;
+    int *arr;
 
-public:
+    public:
     Stack(): size(0), top(-1) {}
-    Stack(int size1): size(size1), top(-1) { arr = new T[size]; }
-  
+    Stack(int size1): size(size1), top(-1) { arr = new int[size]; }
+
     int isEmpty(){ return top == -1; }
     int isFull(){ return size-1 == top; }
-  
-    void push(T x){
+
+    void push(int x){
         try {
             if(isFull()) throw 0;
-            	arr[++top] = x;
+                arr[++top] = x;
         }
         catch(int) {
             cout<<"Stack Overflow!"<<endl;
         }
     }
 
-    T pop(){
+    int pop(){
         try {
             if(isEmpty()) throw 0;
-            	return arr[top--];
+                return arr[top--];
         }
         catch(int) {
             cout<<"Stack Underflow!"<<endl;
-            T junk;
-            return junk;
+            return 0;
         }
     }
+    friend ostream& operator << (ostream &out, Stack s);
 };
 
-int main(){
-	Stack<int> si(10);
-	si.push(1);
-	si.push(2);
-	si.push(3);
-	si.push(4);
-	si.push(5);
-	si.push(6);
-	cout << si.pop() << endl;
-	
-	Stack<Complex> sc(10);
-	sc.push(Complex(1,1));
-	sc.push(Complex(2,2));
-	sc.push(Complex(3,3));
-	sc.push(Complex(4,4));
-	sc.push(Complex(5,5));
-	sc.push(Complex(6,6));
-	cout << sc.pop() << endl;
-	
-	while(!si.isEmpty()){
-		cout << si.pop() << " " << endl;
-	}
-	cout << endl;
+ostream& operator << (ostream &out, Stack s){
+        for(int i  = 0; i < s.size; i++){
+                out << s.arr[i] << " ";
+        }
+        out << endl;
+        return out;
+}
 
-	while(!sc.isEmpty()){
-		cout << sc.pop() << " " << endl;
-	}
-	cout << endl;
-  
-  return 0;
+template <class T>
+void Swap(T &ele1, T &ele2){
+    T temp;
+    temp = ele1;
+    ele1 = ele2;
+    ele2 = temp;
+}
+
+int main(){
+    int num1 = 5, num2 = 9;
+    cout << "Swapping two integers" << endl;
+    cout << "Initial values: num1 =" << num1 << ", num2=" << num2 << endl;
+    Swap(num1, num2);
+    cout << "Final values: num1 =" << num1 << ", num2=" << num2 << endl;
+
+    Complex A(5,3), B(2,7);
+    cout << "Swapping two complex numbers" << endl;
+    cout << "Initial values: A =" << A << ", B=" << B << endl;
+    Swap(A, B);
+    cout << "Final values: A =" << A << ", B=" << B << endl;
+
+    cout << "Initial stacks:" << endl;
+    Stack s1(5), s2(5);
+    s1.push(1);
+    s1.push(2);
+    s1.push(3);
+    cout << s1;
+    s2.push(4);
+    s2.push(5);
+    s2.push(6);
+    cout << s2;
+
+    cout << "After swapping: " << endl;
+    Swap(s1, s2);
+    cout << s1;
+    cout << s2;
+
+    return 0;
 }
